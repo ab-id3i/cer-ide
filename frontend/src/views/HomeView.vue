@@ -4,6 +4,9 @@
     <nav class="bg-gray-800 text-white px-4 py-2 flex items-center justify-between">
       <span class="font-bold">Mon éditeur collaboratif</span>
       <div class="flex items-center gap-2">
+        <button @click="formatCode" class="bg-purple-500 hover:bg-purple-600 px-3 py-1 rounded text-white">
+          Réindenter
+        </button>
         <button @click="layoutMode = layoutMode === 'vertical' ? 'horizontal' : 'vertical'" class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded">
           {{ layoutMode === 'vertical' ? 'Vue côte à côte' : 'Vue haut/bas' }}
         </button>
@@ -74,6 +77,12 @@ const { editorInstance, handleEditorCreated } = useMonaco();
 const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
 const { code } = useCodeSync(socket);
 const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
+
+function formatCode() {
+  if (editorInstance.value) {
+    editorInstance.value.getAction('editor.action.formatDocument').run();
+  }
+}
 </script>
 
 <style>
