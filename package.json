@@ -1,0 +1,19 @@
+{
+  "name": "cer-ide",
+  "version": "1.0.0",
+  "description": "IDE for CER (Création d'Environnement de Référence)",
+  "private": true,
+  "scripts": {
+    "front": "cd frontend && npm run dev",
+    "front:build": "cd frontend && npm run build",
+    "front:preview": "cd frontend && npm run preview",
+    "back": "cd backend && npm run start:dev",
+    "back:build": "cd backend && npm run build",
+    "back:start": "cd backend && npm run start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"npm run front\" \"npm run back\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
