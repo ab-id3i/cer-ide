@@ -29,7 +29,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { SNIPPETS, SNIPPET_CATEGORIES } from '../data/snippets';
-import { defineEmits } from 'vue';
 
 defineEmits(['close']);
 

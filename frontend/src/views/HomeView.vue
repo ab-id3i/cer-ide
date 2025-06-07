@@ -41,12 +41,14 @@
           <div class="h-1 bg-gray-200"></div>
           <div class="flex-1 min-h-0">
             <VuePreview v-if="isVueFile" :code="code" />
+            <JsonPreview v-else-if="isJsonFile" :code="code" />
             <PreviewIframe v-else :code="code" :userId="userId" />
           </div>
         </div>
         <template v-else>
           <div class="flex-1 min-w-0">
             <VuePreview v-if="isVueFile" :code="code" />
+            <JsonPreview v-else-if="isJsonFile" :code="code" />
             <PreviewIframe v-else :code="code" :userId="userId" />
           </div>
           <div class="w-1 bg-gray-200"></div>
@@ -98,6 +100,7 @@ import { Icon } from '@iconify/vue';
 import MonacoEditor from '../components/MonacoEditor.vue';
 import PreviewIframe from '../components/PreviewIframe.vue';
 import VuePreview from '../components/VuePreview.vue';
+import JsonPreview from '../components/JsonPreview.vue';
 import SnippetList from '../components/SnippetList.vue';
 import FileTree from '../components/FileTree.vue';
 import NotificationToast from '../components/NotificationToast.vue';
@@ -147,12 +150,14 @@ function redo() {
 function handleFileSelected(file: any) {
   if (file.content) {
     code.value = file.content;
-    // Déterminer si c'est un fichier Vue
+    // Déterminer le type de fichier
     isVueFile.value = file.name.endsWith('.vue');
+    isJsonFile.value = file.name.endsWith('.json');
   }
 }
 
 const isVueFile = ref(false);
+const isJsonFile = ref(false);
 
 </script>
 
