@@ -1,6 +1,6 @@
 <template>
   <iframe ref="iframeRef" sandbox="allow-scripts allow-same-origin"
-    style="width: 100%; height: 500px; border: 1px solid #ccc;"></iframe>
+    style="width: 100%; height: 100%; border: 1px solid #ccc;"></iframe>
 </template>
 
 <script setup lang="ts">
