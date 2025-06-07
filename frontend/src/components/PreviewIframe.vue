@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 const props = defineProps<{
   code: string;
@@ -12,31 +12,32 @@ const props = defineProps<{
 
 const iframeRef = ref<HTMLIFrameElement | null>(null);
 
+onMounted(() => {
+  updateIframe(props.code);
+});
+
+function updateIframe(newCode: string) {
+  if (iframeRef.value) {
+    iframeRef.value.srcdoc = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">  
+          <link rel="stylesheet" href="/styles/global.css">
+        </head>
+        <body>
+          ${newCode}
+        </body>
+      </html> 
+    `;
+  }
+}
+
 watch(
   () => props.code,
   (newCode) => {
-    if (iframeRef.value) {
-      iframeRef.value.srcdoc = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="/styles/global.css">
-          </head>
-          <body>
-            ${newCode}
-          </body>
-        </html>
-      `;
-    }
+    updateIframe(newCode);
   },
   { immediate: true }
 );
-
-window.console.log = function (...args) {
-  parent.postMessage({ type: 'log', message: args }, '*');
-};
-window.alert = function (msg) {
-  parent.postMessage({ type: 'alert', message: msg }, '*');
-};
 </script>

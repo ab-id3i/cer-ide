@@ -44,13 +44,19 @@ onMounted(() => {
 
       // Ajout du provider d'autocomplétion
       const tailwindClasses = [
-        'bg-red-500', 'bg-blue-500', 'bg-green-500',
-        'text-center', 'text-left', 'text-right',
-        'p-4', 'p-8', 'm-4', 'm-8',
-        'rounded', 'shadow', 'shadow-lg',
-        'flex', 'grid', 'justify-center', 'items-center',
-        'w-full', 'h-screen', 'container', 'mx-auto'
+        'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500', 'bg-gray-500', 'bg-black', 'bg-white',
+        'text-white', 'text-black', 'text-red-500', 'text-blue-500', 'text-green-500',
+        'text-center', 'text-left', 'text-right', 'text-justify',
+        'p-1', 'p-2', 'p-4', 'p-8', 'm-1', 'm-2', 'm-4', 'm-8',
+        'px-4', 'py-2', 'mt-4', 'mb-4', 'ml-4', 'mr-4',
+        'w-full', 'w-1/2', 'w-1/3', 'w-1/4', 'h-full', 'h-screen',
+        'rounded', 'rounded-full', 'border', 'border-2', 'border-gray-500',
+        'flex', 'grid', 'inline-block', 'block', 'hidden',
+        'absolute', 'relative', 'fixed', 'sticky',
+        'shadow', 'shadow-md', 'shadow-lg',
+        'container', 'mx-auto', 'overflow-hidden', 'z-10', 'cursor-pointer'
       ];
+
       monacoEditorLib.languages.registerCompletionItemProvider('html', {
         provideCompletionItems: () => {
           const suggestions = tailwindClasses.map(className => ({

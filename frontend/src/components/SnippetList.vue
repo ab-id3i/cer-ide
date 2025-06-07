@@ -5,7 +5,7 @@
                 <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
             </select>
             <div v-if="selectedCategory !== 'Actions'">
-                <ul class="grid grid-cols-2 gap-4">
+                <ul class="grid gap-4">
                     <li v-for="snippet in filteredSnippets" :key="snippet.id" draggable="true"
                         @dragstart="(e) => handleDragStart(snippet.code, e)"
                         class="neon-snippet-btn">
@@ -14,7 +14,7 @@
                 </ul>
             </div>
             <div v-else>
-                <ul class="grid grid-cols-1 gap-4">
+                <ul class="grid gap-4">
                     <li v-for="snippet in filteredSnippets" :key="snippet.id" draggable="true"
                         @dragstart="(e) => handleDragStart(snippet.code, e)"
                         class="neon-snippet-btn">

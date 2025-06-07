@@ -7,6 +7,8 @@
         <span class="font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">iD3i CodeLab</span>
       </div>
       <div class="flex items-center gap-4">
+        <button @click="undo" class="neon-btn neon-blue" title="Annuler (Ctrl+Z)">⟲</button>
+        <button @click="redo" class="neon-btn neon-blue" title="Rétablir (Ctrl+Y)">⟳</button>
         <button @click="formatCode" class="neon-btn neon-purple">
           Réindenter
         </button>
@@ -84,6 +86,23 @@ const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
 function formatCode() {
   if (editorInstance.value) {
     editorInstance.value.getAction('editor.action.formatDocument').run();
+  }
+}
+function undo() {
+  if (editorInstance.value) {
+    console.log('undo',editorInstance.value.getModel());
+    // editorInstance.value.getModel().undo();
+  } else {
+    console.warn("L'éditeur n'est pas encore prêt !");
+  }
+}
+
+function redo() {
+  if (editorInstance.value) {
+    console.log('redo',editorInstance.value.getModel());
+    // editorInstance.value.getModel().redo();
+  } else {
+    console.warn("L'éditeur n'est pas encore prêt !");
   }
 }
 </script>
