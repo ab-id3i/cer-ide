@@ -1,43 +1,56 @@
-import type { Snippet } from '../types/editor';
 
-export const htmlSnippets: Snippet[] = [
-  {
-    title: 'Page Flex Layout',
-    code: `\n<!DOCTYPE html>\n<html>\n  <head>\n    <style>\n      body { margin: 0; font-family: Arial, sans-serif; }\n      .container { display: flex; height: 100vh; }\n      .sidebar { width: 250px; background: #f4f4f4; padding: 1rem; }\n      .content { flex: 1; padding: 1rem; }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <div class=\"sidebar\">\n        <h2>Menu</h2>\n        <ul><li>Accueil</li><li>À propos</li><li>Contact</li></ul>\n      </div>\n      <div class=\"content\">\n        <h1>Bienvenue !</h1>\n        <p>Voici votre page en flexbox !</p>\n      </div>\n    </div>\n  </body>\n</html>`
-  },
-  {
-    title: 'Page Grid Layout',
-    code: `\n<!DOCTYPE html>\n<html>\n  <head>\n    <style>\n      body { margin: 0; font-family: Arial, sans-serif; }\n      .grid-container {\n        display: grid;\n        grid-template-columns: 1fr 3fr;\n        grid-template-rows: auto 1fr auto;\n        grid-template-areas:\n          \"header header\"\n          \"sidebar content\"\n          \"footer footer\";\n        height: 100vh;\n      }\n      header { grid-area: header; background: #007BFF; color: white; padding: 1rem; }\n      nav { grid-area: sidebar; background: #f4f4f4; padding: 1rem; }\n      main { grid-area: content; padding: 1rem; }\n      footer { grid-area: footer; background: #333; color: white; text-align: center; padding: 1rem; }\n    </style>\n  </head>\n  <body>\n    <div class=\"grid-container\">\n      <header><h1>Mon site en Grid</h1></header>\n      <nav>\n        <ul><li>Accueil</li><li>Services</li><li>Contact</li></ul>\n      </nav>\n      <main>\n        <h2>Bienvenue !</h2>\n        <p>Voici votre page en grid !</p>\n      </main>\n      <footer>&copy; 2025 Mon Site</footer>\n    </div>\n  </body>\n</html>`
-  },
-  {
-    title: 'Bouton simple',
-    code: `<button type=\"button\" class=\"bg-blue-500 text-white px-4 py-2 rounded\">Clique-moi</button>`
-  },
-  {
-    title: 'Input texte',
-    code: `<input type=\"text\" class=\"border rounded px-3 py-2 w-full\" placeholder=\"Saisir un texte\">`
-  },
-  {
-    title: 'Formulaire basique',
-    code: `\n<form class=\"space-y-4\">\n  <div>\n    <label for=\"name\" class=\"block font-semibold\">Nom :</label>\n    <input type=\"text\" id=\"name\" name=\"name\" class=\"border rounded px-3 py-2 w-full\" placeholder=\"Votre nom\">\n  </div>\n  <div>\n    <label for=\"email\" class=\"block font-semibold\">Email :</label>\n    <input type=\"email\" id=\"email\" name=\"email\" class=\"border rounded px-3 py-2 w-full\" placeholder=\"Votre email\">\n  </div>\n  <button type=\"submit\" class=\"bg-green-500 text-white px-4 py-2 rounded\">Envoyer</button>\n</form>`
-  }
+export interface Snippet {
+  id: string;
+  title: string;
+  category: string;
+  code: string;
+}
+
+export const SNIPPET_CATEGORIES = [
+  'Layouts & Structure',
+  'Navigation',
+  'Titres & Textes',
+  'Boutons & Actions',
+  'Formulaires & Inputs',
+  'Cartes & Listes',
+  'Tableaux & Données',
+  'Modales & Overlays',
+  'Médias & Visuels',
+  'Utilitaires & Divers',
+  'Actions',
 ];
 
-export const actionSnippets: Snippet[] = [
-  {
-    title: 'Console Log',
-    code: `@click=\"console.log('Hello World!');\"`
-  },
-  {
-    title: 'Alert',
-    code: `@click=\"alert('Hello from the snippet!');\"`
-  },
-  {
-    title: 'Prompt Input',
-    code: `\n@click=\"const name = prompt('Quel est votre nom ?'); alert('Bonjour ' + name + ' !');\"\n`
-  },
-  {
-    title: 'Ajouter une classe',
-    code: `\n@click=\"document.querySelector('body').classList.add('bg-red-500');\"\n`
-  }
-]; 
+export const SNIPPETS: Snippet[] = [
+  { id: 'flex-layout', title: 'Page Flex Layout', category: 'Layouts & Structure', code: '<div class=\'min-h-screen flex items-center justify-center bg-gray-100\'>\n  <div class=\'text-center\'>\n    <h1 class=\'text-3xl font-bold mb-4\'>Bienvenue sur ma page Flex</h1>\n    <p class=\'text-gray-600\'>Utilisez Flexbox pour aligner les éléments facilement.</p>\n  </div>\n</div>' },
+  { id: 'grid-layout', title: 'Page Grid Layout', category: 'Layouts & Structure', code: '<div class=\'grid grid-cols-3 gap-4 p-4\'>\n  <div class=\'bg-white p-4 rounded shadow\'>Bloc 1</div>\n  <div class=\'bg-white p-4 rounded shadow\'>Bloc 2</div>\n  <div class=\'bg-white p-4 rounded shadow\'>Bloc 3</div>\n</div>' },
+  { id: 'container-responsive', title: 'Container Responsive', category: 'Layouts & Structure', code: '<div class=\'container mx-auto px-4\'>\n  <h2 class=\'text-2xl font-semibold mb-4\'>Contenu centré</h2>\n  <p>Ce conteneur s\'adapte à l\'écran pour offrir une lecture confortable.</p>\n</div>' },
+  { id: 'wrapper-max', title: 'Wrapper max-width', category: 'Layouts & Structure', code: '<div class=\'max-w-4xl mx-auto p-4\'>\n  <h2 class=\'text-xl font-bold mb-2\'>Titre principal</h2>\n  <p class=\'text-gray-600\'>Contenu limité à une largeur maximale pour une meilleure lisibilité.</p>\n</div>' },
+  { id: 'section-full', title: 'Section pleine largeur', category: 'Layouts & Structure', code: '<section class=\'w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-12\'>\n  <div class=\'container mx-auto px-4\'>\n    <h2 class=\'text-3xl font-bold\'>Section en plein écran</h2>\n    <p>Cette section utilise toute la largeur de l\'écran.</p>\n  </div>\n</section>' },
+  { id: 'section-center', title: 'Section centrée verticalement', category: 'Layouts & Structure', code: '<section class=\'h-screen flex items-center justify-center bg-gray-100\'>\n  <div class=\'text-center\'>\n    <h2 class=\'text-3xl font-bold mb-4\'>Section centrée</h2>\n    <p>Contenu aligné verticalement et horizontalement.</p>\n  </div>\n</section>' },
+  { id: 'sidebar', title: 'Sidebar (gauche/droite)', category: 'Layouts & Structure', code: '<div class=\'flex\'>\n  <aside class=\'w-64 bg-gray-800 text-white p-4\'>\n    <h3 class=\'font-bold mb-2\'>Menu</h3>\n    <ul class=\'space-y-2\'>\n      <li><a href=\'#\' class=\'hover:underline\'>Accueil</a></li>\n      <li><a href=\'#\' class=\'hover:underline\'>Profil</a></li>\n    </ul>\n  </aside>\n  <main class=\'flex-1 p-4\'>\n    <h2 class=\'text-2xl font-bold\'>Contenu principal</h2>\n    <p>Voici le contenu de la page.</p>\n  </main>\n</div>' },
+  { id: 'split-screen', title: 'Split Screen (2 colonnes)', category: 'Layouts & Structure', code: '<div class=\'grid grid-cols-2 h-screen\'>\n  <div class=\'bg-blue-600 text-white flex items-center justify-center\'>Colonne gauche</div>\n  <div class=\'bg-gray-100 flex items-center justify-center\'>Colonne droite</div>\n</div>' },
+  { id: 'navbar', title: 'Navbar principale (responsive)', category: 'Navigation', code: '<nav class=\'bg-blue-600 text-white p-4\'>\n  <div class=\'container mx-auto flex justify-between items-center\'>\n    <div class=\'font-bold text-lg\'>Logo</div>\n    <ul class=\'flex space-x-4\'>\n      <li><a href=\'#\' class=\'hover:underline\'>Accueil</a></li>\n      <li><a href=\'#\' class=\'hover:underline\'>Services</a></li>\n      <li><a href=\'#\' class=\'hover:underline\'>Contact</a></li>\n    </ul>\n  </div>\n</nav>' },
+  { id: 'navbar-burger', title: 'Navbar avec menu burger', category: 'Navigation', code: '<nav class=\'bg-gray-800 text-white p-4\'>\n  <div class=\'flex items-center justify-between\'>\n    <div class=\'font-bold\'>Logo</div>\n    <button class=\'md:hidden\'>\n      <svg class=\'w-6 h-6\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'>\n        <path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 6h16M4 12h16M4 18h16\'/>\n      </svg>\n    </button>\n  </div>\n</nav>' },
+  { id: 'sidebar-nav', title: 'Sidebar navigation verticale', category: 'Navigation', code: '<aside class=\'w-64 h-screen bg-gray-900 text-white p-4\'>\n  <h2 class=\'text-lg font-bold mb-4\'>Menu</h2>\n  <ul class=\'space-y-2\'>\n    <li><a href=\'#\' class=\'hover:underline\'>Dashboard</a></li>\n    <li><a href=\'#\' class=\'hover:underline\'>Settings</a></li>\n  </ul>\n</aside>' },
+  { id: 'tabs-horizontal', title: 'Tabs horizontaux', category: 'Navigation', code: '<div class=\'border-b border-gray-300\'>\n  <nav class=\'-mb-px flex space-x-8\'>\n    <a href=\'#\' class=\'border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium\'>Tab 1</a>\n    <a href=\'#\' class=\'text-gray-500 whitespace-nowrap py-4 px-1 border-b-2 hover:border-gray-300\'>Tab 2</a>\n  </nav>\n</div>' },
+  { id: 'breadcrumbs', title: 'Breadcrumbs', category: 'Navigation', code: '<nav class=\'text-gray-500 mb-4\'>\n  <ol class=\'list-reset flex\'>\n    <li><a href=\'#\' class=\'text-blue-500 hover:underline\'>Home</a></li>\n    <li><span class=\'mx-2\'>/</span></li>\n    <li>Current Page</li>\n  </ol>\n</nav>' },
+  { id: 'h1-main', title: 'Titre principal (h1 stylé)', category: 'Titres & Textes', code: '<h1 class=\'text-4xl font-extrabold text-center text-gray-800 mb-4\'>Bienvenue</h1>' },
+  { id: 'h2-sub', title: 'Sous-titre (h2 stylé)', category: 'Titres & Textes', code: '<h2 class=\'text-2xl font-semibold text-gray-700 mb-2\'>Sous-titre élégant</h2>' },
+  { id: 'paragraph', title: 'Paragraphe stylé', category: 'Titres & Textes', code: '<p class=\'text-gray-600 leading-relaxed\'>Ce paragraphe propose un texte lisible avec une mise en forme adaptée à tous les écrans grâce à Tailwind CSS.</p>' },
+  { id: 'blockquote', title: 'Bloc citation stylée', category: 'Titres & Textes', code: '<blockquote class=\'border-l-4 border-blue-500 pl-4 italic text-gray-600\'>« Ceci est une citation stylée avec Tailwind CSS. »</blockquote>' },
+  { id: 'btn-primary', title: 'Bouton primaire', category: 'Boutons & Actions', code: '<button class=\'bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600\'>Cliquez-moi</button>' },
+  { id: 'btn-secondary', title: 'Bouton secondaire', category: 'Boutons & Actions', code: '<button class=\'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600\'>Annuler</button>' },
+  { id: 'btn-icon', title: 'Bouton avec icône', category: 'Boutons & Actions', code: '<button class=\'bg-green-500 text-white flex items-center px-4 py-2 rounded\'>\n  <svg class=\'w-5 h-5 mr-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'>\n    <path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M5 13l4 4L19 7\'/>\n  </svg>\n  Valider\n</button>' },
+  { id: 'btn-toggle', title: 'Bouton toggle (on/off)', category: 'Boutons & Actions', code: '<button class=\'bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500\'>Activer</button>' },
+  { id: 'btn-loading', title: 'Bouton loading (spinner)', category: 'Boutons & Actions', code: '<button class=\'bg-blue-500 text-white px-4 py-2 rounded flex items-center\'>\n  <svg class=\'animate-spin h-5 w-5 mr-2 text-white\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'>\n    <circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle>\n    <path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8v8z\'></path>\n  </svg>\n  Chargement...\n</button>' },
+  { id: 'input-text', title: 'Input texte simple', category: 'Formulaires & Inputs', code: '<input type=\'text\' placeholder=\'Votre nom\' class=\'border rounded px-3 py-2 w-full\'>' },
+  { id: 'input-label', title: 'Input avec label flottant', category: 'Formulaires & Inputs', code: '<div class=\'relative\'>\n  <input type=\'text\' id=\'name\' class=\'peer border-b-2 border-gray-300 focus:border-blue-500 w-full px-2 py-1\'>\n  <label for=\'name\' class=\'absolute left-2 top-0 text-gray-500 transition-all peer-focus:text-xs peer-focus:-top-4\'>Nom</label>\n</div>' },
+  { id: 'input-password', title: 'Input password avec toggle', category: 'Formulaires & Inputs', code: '<div class=\'relative\'>\n  <input type=\'password\' class=\'border rounded px-3 py-2 w-full\'>\n  <button type=\'button\' class=\'absolute right-2 top-2 text-sm text-gray-500\'>Afficher</button>\n</div>' },
+  { id: 'select-custom', title: 'Select custom', category: 'Formulaires & Inputs', code: '<select class=\'border rounded px-3 py-2 w-full\'>\n  <option>Option 1</option>\n  <option>Option 2</option>\n</select>' },
+  { id: 'checkbox-radio', title: 'Checkbox / Radio custom', category: 'Formulaires & Inputs', code: '<div>\n  <label class=\'inline-flex items-center\'>\n    <input type=\'checkbox\' class=\'form-checkbox\'>\n    <span class=\'ml-2\'>J\'accepte</span>\n  </label>\n  <label class=\'inline-flex items-center ml-4\'>\n    <input type=\'radio\' class=\'form-radio\' name=\'option\'>\n    <span class=\'ml-2\'>Option 1</span>\n  </label>\n</div>' },
+  { id: 'form-base', title: 'Formulaire de base', category: 'Formulaires & Inputs', code: '<form class=\'bg-white p-6 rounded shadow\'>\n  <div class=\'mb-4\'>\n    <label class=\'block text-gray-700\'>Nom :</label>\n    <input type=\'text\' class=\'border rounded px-3 py-2 w-full\'>\n  </div>\n  <button type=\'submit\' class=\'bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600\'>Envoyer</button>\n</form>' },
+  { id: 'card-simple', title: 'Carte simple', category: 'Cartes & Listes', code: '<div class=\'max-w-sm bg-white rounded shadow p-4\'>\n  <h2 class=\'text-xl font-bold mb-2\'>Titre de la carte</h2>\n  <p class=\'text-gray-600\'>Description de la carte simple avec Tailwind CSS.</p>\n</div>' },
+  { id: 'card-img', title: 'Carte avec image', category: 'Cartes & Listes', code: '<div class=\'max-w-sm bg-white rounded shadow overflow-hidden\'>\n  <img src=\'https://via.placeholder.com/400x200\' alt=\'Image\'>\n  <div class=\'p-4\'>\n    <h2 class=\'text-xl font-bold mb-2\'>Titre de la carte</h2>\n    <p class=\'text-gray-600\'>Description de la carte avec image.</p>\n  </div>\n</div>' },
+  { id: 'list-actions', title: 'Liste d\'éléments avec actions', category: 'Cartes & Listes', code: '<ul class=\'divide-y divide-gray-200\'>\n  <li class=\'flex justify-between py-2\'>\n    <span>Item 1</span>\n    <button class=\'text-blue-500 hover:underline\'>Modifier</button>\n  </li>\n  <li class=\'flex justify-between py-2\'>\n    <span>Item 2</span>\n    <button class=\'text-red-500 hover:underline\'>Supprimer</button>\n  </li>\n</ul>' },
+  { id: 'timeline-vertical', title: 'Timeline verticale', category: 'Cartes & Listes', code: '<div class=\'relative border-l-2 border-gray-200 ml-4\'>\n  <div class=\'mb-4 ml-4\'>\n    <div class=\'bg-blue-500 text-white rounded px-2 py-1 inline-block\'>Étape 1</div>\n    <p class=\'text-gray-600\'>Description de l\'étape 1.</p>\n  </div>\n  <div class=\'mb-4 ml-4\'>\n    <div class=\'bg-blue-500 text-white rounded px-2 py-1 inline-block\'>Étape 2</div>\n    <p class=\'text-gray-600\'>Description de l\'étape 2.</p>\n  </div>\n</div>' },
+];

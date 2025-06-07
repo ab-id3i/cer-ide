@@ -1,4 +1,4 @@
-# CER IDE
+# iD3i CodeLab
 
 Un IDE moderne pour la Création d'Environnement de Référence (CER), offrant une interface intuitive pour la création et la gestion de vos environnements.
 
