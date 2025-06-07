@@ -5,6 +5,7 @@
       <div class="flex items-center gap-2">
         <img src="/logo.svg" alt="Logo iD3i CodeLab" class="h-8 w-8 inline-block align-middle" />
         <span class="font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">iD3i CodeLab</span>
+        <span v-if="userPseudo" class="ml-4 font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">- {{ userPseudo }}</span>
       </div>
       <div class="flex items-center gap-4">
         <button @click="undo" class="neon-btn neon-blue" title="Annuler (Ctrl+Z)">⟲</button>
@@ -78,7 +79,7 @@ import NotificationToast from '../components/NotificationToast.vue';
 import { v4 as uuidv4 } from 'uuid';
 import { useCursors } from '../composables/useCursors';
 import { useCodeSync } from '../composables/useCodeSync';
-import { useMonaco } from '../composables/useMonaco';
+import { useMonaco, userPseudo } from '../composables/useMonaco';
 import { useSnippet } from '../composables/useSnippet';
 
 const socket = inject('socket') as any;
@@ -115,6 +116,7 @@ function redo() {
     showNotification('En cours de développement', 'warning', 2000);
   }
 }
+
 </script>
 
 <style>

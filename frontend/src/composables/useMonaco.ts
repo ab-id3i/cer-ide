@@ -1,5 +1,7 @@
 import { ref } from "vue";
 
+export const userPseudo = ref<string | null>(null);
+
 export function useMonaco() {
   const editorInstance = ref<any>(null);
 

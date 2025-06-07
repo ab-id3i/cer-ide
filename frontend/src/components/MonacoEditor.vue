@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { debounce } from 'lodash';
-
+import { userPseudo } from '../composables/useMonaco';
 
 const props = defineProps<{
   modelValue: string;
@@ -17,7 +17,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
-  (e: 'cursorPositionChange', value: { userId: string; position: any }): void;
+  (e: 'cursorPositionChange', value: { userId: string; userPseudo: string; position: any }): void;
   (e: 'editorCreated', value: any): void;
 }>();
 
@@ -91,6 +91,7 @@ onMounted(() => {
           // On émet l’événement via le parent
           emit('cursorPositionChange', {
             userId: props.userId,
+            userPseudo: userPseudo.value || 'Inconnu',
             position
           });
         }
@@ -119,14 +120,15 @@ watch(
       const color = props.userColors[otherUserId] || 'red'; // fallback au cas où
       decorations.push({
         range: new monacoEditorLib.Range(
-          position.lineNumber,
-          position.column,
-          position.lineNumber,
-          position.column
+          position.position.lineNumber,
+          position.position.column,
+          position.position.lineNumber,
+          position.position.column
         ),
         options: {
           className: `remote-cursor-${otherUserId}`,
-          isWholeLine: true
+          isWholeLine: true,
+          hoverMessage: { value: `👤 ${position.userPseudo}` }
         }
       });
       // Injecter dynamiquement la couleur si elle n’existe pas déjà
@@ -135,7 +137,7 @@ watch(
         style.id = `remote-cursor-style-${otherUserId}`;
         style.innerHTML = `
       .remote-cursor-${otherUserId} {
-        border-left: 2px solid ${color} !important;
+        border-left: 10px solid ${color} !important;
       }
     `;
         document.head.appendChild(style);

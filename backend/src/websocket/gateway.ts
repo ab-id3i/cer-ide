@@ -21,7 +21,7 @@ export class Gateway {
   constructor() {
     // Bufferiser les changements toutes les 100 ms
     this.codeChange$
-      .pipe(bufferTime(100))
+      .pipe(bufferTime(500))
       .subscribe((messages) => {
         // Diffuser chaque message du buffer à tous les clients
         messages.forEach((data) => {
