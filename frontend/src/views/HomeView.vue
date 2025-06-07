@@ -59,6 +59,13 @@
         </aside>
       </transition>
     </div>
+
+    <NotificationToast
+      :message="notification.message"
+      :type="notification.type"
+      :show="notification.show"
+      @close="notification.show = false"
+    />
   </div>
 </template>
 
@@ -67,6 +74,7 @@ import { ref, inject } from 'vue';
 import MonacoEditor from '../components/MonacoEditor.vue';
 import PreviewIframe from '../components/PreviewIframe.vue';
 import SnippetList from '../components/SnippetList.vue';
+import NotificationToast from '../components/NotificationToast.vue';
 import { v4 as uuidv4 } from 'uuid';
 import { useCursors } from '../composables/useCursors';
 import { useCodeSync } from '../composables/useCodeSync';
@@ -83,26 +91,28 @@ const { otherCursors, userColors, handleCursorPositionChange } = useCursors(user
 const { code } = useCodeSync(socket);
 const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
 
+const notification = ref({ show: false, message: '', type: 'success' as 'success' | 'error' | 'warning' });
+function showNotification(message: string, type: 'success' | 'error' | 'warning' = 'success', duration = 3000) {
+  notification.value = { show: true, message, type };
+  setTimeout(() => notification.value.show = false, duration);
+}
+
 function formatCode() {
   if (editorInstance.value) {
     editorInstance.value.getAction('editor.action.formatDocument').run();
+    showNotification('Code réindenté avec succès', 'success');
   }
 }
 function undo() {
   if (editorInstance.value) {
-    console.log('undo',editorInstance.value.getModel());
-    // editorInstance.value.getModel().undo();
-  } else {
-    console.warn("L'éditeur n'est pas encore prêt !");
+    // editorInstance.value.getAction('undo').run();
+    showNotification('En cours de développement', 'warning', 2000);
   }
 }
-
 function redo() {
   if (editorInstance.value) {
-    console.log('redo',editorInstance.value.getModel());
-    // editorInstance.value.getModel().redo();
-  } else {
-    console.warn("L'éditeur n'est pas encore prêt !");
+    // editorInstance.value.getAction('redo').run();
+    showNotification('En cours de développement', 'warning', 2000);
   }
 }
 </script>
