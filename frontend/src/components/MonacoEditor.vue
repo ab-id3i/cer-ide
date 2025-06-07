@@ -20,6 +20,7 @@ const emit = defineEmits<{
 }>();
 
 const editorContainer = ref<HTMLElement | null>(null);
+
 let editorInstance: any = null;
 let monacoEditorLib: any = null;
 const decorationsRef = ref<string[]>([]);
