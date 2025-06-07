@@ -10,20 +10,21 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch } from 'vue';
+import { inject, ref } from 'vue';
 import MonacoEditor from '../components/MonacoEditor.vue';
 import PreviewIframe from '../components/PreviewIframe.vue';
 import SnippetList from '../components/SnippetList.vue';
 import { v4 as uuidv4 } from 'uuid';
 import { useCursors } from '../composables/useCursors';
+import { useCodeSync } from '../composables/useCodeSync';
 
 const socket = inject('socket') as any;
-const code = ref('<h1>Hello World</h1>');
 const userId = uuidv4();
 const editorInstance = ref<any>(null);
 const snippetCode = ref<string | null>(null);
 
 const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
+const { code } = useCodeSync(socket);
 
 function handleSnippetDrag(code: string) {
   snippetCode.value = code;
@@ -52,20 +53,10 @@ function handleDrop(event: DragEvent) {
         }
       ]);
       const newValue = editorInstance.value.getValue();
-      code.value = newValue; // Met à jour la variable réactive
+      code.value = newValue;
     }
   }
 }
-
-// Quand on reçoit un code depuis le serveur, on met à jour le code local
-socket.on('codeUpdate', (newCode: string) => {
-  code.value = newCode;
-});
-
-// Chaque fois que le code local change, on l'envoie au serveur
-watch(code, (newCode) => {
-  socket.emit('codeChange', newCode);
-});
 
 window.addEventListener('message', (event) => {
   if (event.data.type === 'log') {

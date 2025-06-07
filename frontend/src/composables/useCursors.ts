@@ -1,5 +1,4 @@
-import { ref, type Ref } from 'vue';
-import type { editor } from 'monaco-editor';
+import { ref } from 'vue';
 
 export function useCursors(userId: string, socket: any) {
   const otherCursors = ref<Record<string, any>>({});
