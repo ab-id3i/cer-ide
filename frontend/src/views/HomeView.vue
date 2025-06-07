@@ -1,16 +1,16 @@
 <template>
   <div class="h-screen flex flex-col">
     <!-- Navbar -->
-    <nav class="bg-gray-800 text-white px-4 py-2 flex items-center justify-between">
-      <span class="font-bold">Mon éditeur collaboratif</span>
-      <div class="flex items-center gap-2">
-        <button @click="formatCode" class="bg-purple-500 hover:bg-purple-600 px-3 py-1 rounded text-white">
+    <nav class="bg-[#181c24] font-mono border-b-4 border-cyan-400 shadow-lg px-6 py-3 flex items-center justify-between relative z-10">
+      <span class="font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">CER. IDE</span>
+      <div class="flex items-center gap-4">
+        <button @click="formatCode" class="neon-btn neon-purple">
           Réindenter
         </button>
-        <button @click="layoutMode = layoutMode === 'vertical' ? 'horizontal' : 'vertical'" class="bg-green-500 hover:bg-green-600 px-3 py-1 rounded">
+        <button @click="layoutMode = layoutMode === 'vertical' ? 'horizontal' : 'vertical'" class="neon-btn neon-green">
           {{ layoutMode === 'vertical' ? 'Vue côte à côte' : 'Vue haut/bas' }}
         </button>
-        <button @click="showSnippets = !showSnippets" class="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded">
+        <button @click="showSnippets = !showSnippets" class="neon-btn neon-blue">
           {{ showSnippets ? 'Fermer les snippets' : 'Snippets' }}
         </button>
       </div>
@@ -44,9 +44,9 @@
       <!-- Sidebar dockée à droite -->
       <transition name="slide">
         <aside v-if="showSnippets" class="w-80 h-full bg-white border-l border-gray-200 shadow-lg flex flex-col z-40">
-          <div class="flex items-center justify-between px-4 py-2 border-b">
-            <span class="font-semibold">Snippets</span>
-            <button @click="showSnippets = false" class="text-gray-500 hover:text-gray-800">✕</button>
+          <div class=" bg-black flex items-center justify-between px-4 py-2 border-b">
+            <h3 class="text-lg font-extrabold text-cyan-400 tracking-widest uppercase drop-shadow-neon">Snippets</h3>
+            <button @click="showSnippets = false" class="text-cyan-400 drop-shadow-neon">✕</button>
           </div>
           <div class="flex-1 overflow-y-auto">
             <SnippetList @dragstart="handleSnippetDrag" />
@@ -86,6 +86,61 @@ function formatCode() {
 </script>
 
 <style>
+/* Neon effect for buttons */
+.neon-btn {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.375rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: transparent;
+  box-shadow: 0 0 8px #00fff7, 0 0 16px #00fff7, 0 0 2px #00fff7 inset;
+  color: #fff;
+  background: #23272e;
+  transition: all 0.18s;
+  position: relative;
+  z-index: 1;
+}
+.neon-btn:active {
+  transform: scale(0.97);
+}
+.neon-purple {
+  background: #2d1a4a;
+  box-shadow: 0 0 8px #a259ff, 0 0 16px #a259ff, 0 0 2px #a259ff inset;
+  border-color: #a259ff;
+}
+.neon-purple:hover {
+  background: #a259ff;
+  color: #181c24;
+  box-shadow: 0 0 16px #a259ff, 0 0 32px #a259ff;
+}
+.neon-green {
+  background: #1a4a2d;
+  box-shadow: 0 0 8px #00ffae, 0 0 16px #00ffae, 0 0 2px #00ffae inset;
+  border-color: #00ffae;
+}
+.neon-green:hover {
+  background: #00ffae;
+  color: #181c24;
+  box-shadow: 0 0 16px #00ffae, 0 0 32px #00ffae;
+}
+.neon-blue {
+  background: #1a274a;
+  box-shadow: 0 0 8px #00fff7, 0 0 16px #00fff7, 0 0 2px #00fff7 inset;
+  border-color: #00fff7;
+}
+.neon-blue:hover {
+  background: #00fff7;
+  color: #181c24;
+  box-shadow: 0 0 16px #00fff7, 0 0 32px #00fff7;
+}
+/* Neon text shadow for title */
+.drop-shadow-neon {
+  text-shadow: 0 0 6px #00fff7, 0 0 12px #00fff7;
+}
 .slide-enter-active, .slide-leave-active {
   transition: transform 0.2s, opacity 0.2s;
 }

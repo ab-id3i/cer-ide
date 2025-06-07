@@ -12,6 +12,17 @@ Un IDE moderne pour la Création d'Environnement de Référence (CER), offrant u
 - Terminal intégré
 - Prévisualisation en temps réel
 
+## Documentation
+
+Retrouvez l'ensemble de la documentation du projet dans le dossier `documentation/` :
+
+- [Catalogue de snippets](documentation/snippets_catalogue.md)
+- [Comparaison des éditeurs (Squelette Projet)](documentation/CER-CDC-IDE-SqueletteProjet-ComparaisonEditors-2025-06-06.md)
+- [Mise en place du POC](documentation/CER-CDC-IDE-MiseEnPlacePOC-2025-06-06.md)
+- [Diagramme d'architecture](documentation/CER-CDC-IDE-DiagrammeArchitecture-2025-06-06.md)
+- [Choix des technologies](documentation/CER-CDC-IDE-ChoixTechnos-2025-06-06.md)
+- [CDC complet (PDF)](documentation/CER-CDC-IDE%20-06062025.pdf)
+
 ## Prérequis
 
 - Node.js 18 ou supérieur
@@ -96,6 +107,8 @@ cer-ide/
 ### Utilitaires
 - `npm run install:all` : Installe toutes les dépendances
 - `npm run dev` : Lance le frontend et le backend en parallèle
+
+
 
 ## Contribution
 
