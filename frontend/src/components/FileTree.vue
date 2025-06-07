@@ -180,7 +180,7 @@ function deleteFile() {
 }
 
 // Gestionnaire pour fermer le menu contextuel lors d'un clic à l'extérieur
-function handleClickOutside(event: MouseEvent) {
+function handleClickOutside() {
   if (contextMenu.value.show) {
     hideContextMenu();
   }
