@@ -5,6 +5,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
+import { debounce } from 'lodash';
+
 
 const props = defineProps<{
   modelValue: string;
@@ -25,6 +27,12 @@ let editorInstance: any = null;
 let monacoEditorLib: any = null;
 const decorationsRef = ref<string[]>([]);
 
+// Fonction appelée quand le contenu change
+const sendContentChange = debounce((value: any) => {
+  emit('update:modelValue', value);
+
+}, 500); // envoie toutes les 100ms max
+
 onMounted(() => {
   const requireScript = document.createElement('script');
   requireScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js';
@@ -40,6 +48,9 @@ onMounted(() => {
         value: props.modelValue,
         language: 'html',
         theme: 'vs-dark',
+        automaticLayout: true,
+        renderWhitespace: 'boundary', // optionnelle
+        minimap: { enabled: false }, // réduit la charge visuelle
       });
 
       // Ajout du provider d'autocomplétion
@@ -72,7 +83,7 @@ onMounted(() => {
 
       editorInstance.onDidChangeModelContent(() => {
         const value = editorInstance.getValue();
-        emit('update:modelValue', value);
+        sendContentChange(value)
       });
       editorInstance.onDidChangeCursorPosition(() => {
         const position = editorInstance.getPosition();

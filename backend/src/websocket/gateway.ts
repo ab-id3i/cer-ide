@@ -5,6 +5,8 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { Subject } from 'rxjs';
+import { bufferTime } from 'rxjs/operators';
 
 @WebSocketGateway({
   cors: { origin: '*' },
@@ -13,10 +15,25 @@ export class Gateway {
   @WebSocketServer()
   server: Server;
 
+  // Ajout du buffer pour les changements de code
+  private codeChange$ = new Subject<string>();
+
+  constructor() {
+    // Bufferiser les changements toutes les 100 ms
+    this.codeChange$
+      .pipe(bufferTime(100))
+      .subscribe((messages) => {
+        // Diffuser chaque message du buffer à tous les clients
+        messages.forEach((data) => {
+          this.server.emit('codeUpdate', data);
+        });
+      });
+  }
+
   @SubscribeMessage('codeChange')
   handleCodeChange(@MessageBody() data: string): void {
-    // Diffuser à tous les clients sauf l'expéditeur
-    this.server.emit('codeUpdate', data);
+    // Ajouter le message au buffer
+    this.codeChange$.next(data);
   }
 
   @SubscribeMessage('cursorPositionChange')
