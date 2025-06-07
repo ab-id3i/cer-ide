@@ -5,7 +5,7 @@ import router from './router'
 import 'monaco-editor/min/vs/editor/editor.main.css'
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000'); // à ajuster si besoin
+const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000');
 
 const app = createApp(App)
 app.provide('socket', socket)

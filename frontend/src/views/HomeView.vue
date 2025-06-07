@@ -85,7 +85,7 @@ const socket = inject('socket') as any;
 const userId = uuidv4();
 
 const showSnippets = ref(false);
-const layoutMode = ref<'vertical' | 'horizontal'>('vertical');
+const layoutMode = ref<'vertical' | 'horizontal'>('horizontal');
 const { editorInstance, handleEditorCreated } = useMonaco();
 const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
 const { code } = useCodeSync(socket);

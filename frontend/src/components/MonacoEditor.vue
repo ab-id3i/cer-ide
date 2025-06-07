@@ -74,7 +74,7 @@ onMounted(() => {
         const value = editorInstance.getValue();
         emit('update:modelValue', value);
       });
-      editorInstance.onDidChangeCursorPosition((e: any) => {
+      editorInstance.onDidChangeCursorPosition(() => {
         const position = editorInstance.getPosition();
         if (position) {
           // On émet l’événement via le parent
