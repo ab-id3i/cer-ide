@@ -84,9 +84,10 @@ export class Gateway {
 
   @SubscribeMessage('cursorPositionChange')
   handleCursorPositionChange(@MessageBody() payload: any): void {
+        console.log('Received cursorPositionChange:', payload);
+
     if(!payload.userId) return;
     if(!payload.position) return;
-    console.log('Received cursorPositionChange:', payload);
     this.server.emit('cursorPositionUpdate', payload);
   }
 
