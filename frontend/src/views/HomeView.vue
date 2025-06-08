@@ -118,7 +118,7 @@ const showFileTree = ref(false);
 const layoutMode = ref<'vertical' | 'horizontal'>('horizontal');
 const { editorInstance, handleEditorCreated } = useMonaco();
 const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
-const { code, currentVersion, isUpdating } = useCodeSync(socket);
+const { code } = useCodeSync(socket);
 const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
 
 const notification = ref({ show: false, message: '', type: 'success' as 'success' | 'error' | 'warning' });
