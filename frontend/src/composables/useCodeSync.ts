@@ -7,6 +7,13 @@ interface CodeUpdate {
   timestamp: number;
 }
 
+// Fonction de log conditionnelle
+const log = (...args: any[]) => {
+  if (import.meta.env.DEV) {
+    log(...args);
+  }
+};
+
 export function useCodeSync(
   socket: any,
   initialCode: string = "<!DOCTYPE html>\n<html>\n  <head>\n    <title>iD3i CodeLab</title>\n  </head>\n  <body>\n    <h1>Bienvenue sur iD3i CodeLab !</h1>\n  </body>\n</html>"
@@ -19,16 +26,16 @@ export function useCodeSync(
 
   // Écouter les mises à jour de code depuis le serveur
   socket.on("codeUpdate", (update: CodeUpdate) => {
-    console.log('Received codeUpdate:', update, 'version:', update.version, 'currentVersion:', currentVersion.value);
+    log('Received codeUpdate:', update, 'version:', update.version, 'currentVersion:', currentVersion.value);
     
     // Ignorer les mises à jour si le contenu est identique
     if (update.content === lastContent.value) {
-      console.log('Ignoring update with identical content');
+      log('Ignoring update with identical content');
       return;
     }
 
     if (update.version > currentVersion.value) {
-      console.log('Applying update version:', update.version);
+      log('Applying update version:', update.version);
       isUpdating.value = true;
       lastContent.value = update.content;
       code.value = update.content;
@@ -36,22 +43,22 @@ export function useCodeSync(
       lastUpdateTimestamp.value = update.timestamp;
       isUpdating.value = false;
     } else {
-      console.log('Ignoring older version:', update.version, 'current:', currentVersion.value);
+      log('Ignoring older version:', update.version, 'current:', currentVersion.value);
     }
   });
 
   // Écouter les mises à jour de version
   socket.on("versionUpdate", (update: { version: number; content: string }) => {
-    console.log('Received versionUpdate:', update);
+    log('Received versionUpdate:', update);
     
     // Ignorer les mises à jour si le contenu est identique
     if (update.content === lastContent.value) {
-      console.log('Ignoring version update with identical content');
+      log('Ignoring version update with identical content');
       return;
     }
 
     if (update.version > currentVersion.value) {
-      console.log('Applying version update:', update.version);
+      log('Applying version update:', update.version);
       isUpdating.value = true;
       lastContent.value = update.content;
       code.value = update.content;
@@ -64,13 +71,13 @@ export function useCodeSync(
   let updateTimeout: number | null = null;
   watch(code, (newCode) => {
     if (isUpdating.value) {
-      console.log('Skipping update while isUpdating is true');
+      log('Skipping update while isUpdating is true');
       return;
     }
 
     // Ignorer les mises à jour si le contenu est identique
     if (newCode === lastContent.value) {
-      console.log('Skipping update with identical content');
+      log('Skipping update with identical content');
       return;
     }
 
@@ -79,7 +86,7 @@ export function useCodeSync(
     }
 
     updateTimeout = window.setTimeout(() => {
-      console.log('Sending codeChange to server:', {
+      log('Sending codeChange to server:', {
         content: newCode,
         userId: socket.id,
         timestamp: Date.now()
@@ -94,7 +101,7 @@ export function useCodeSync(
   });
 
   // Demander la dernière version au chargement
-  console.log('Requesting initial version');
+  log('Requesting initial version');
   socket.emit("requestVersion");
 
   return {
