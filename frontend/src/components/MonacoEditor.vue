@@ -47,7 +47,7 @@ const sendContentChange = debounce((value: any) => {
       timestamp: Date.now()
     });
   }
-}, 100); // envoie toutes les 1000ms max
+}, 500); // envoie toutes les 1000ms max
 
 // Ajout du debounce pour la gestion des positions du curseur
 const debouncedCursorPositionChange = debounce((position: any) => {
@@ -58,7 +58,7 @@ const debouncedCursorPositionChange = debounce((position: any) => {
       position
     });
   }
-}, 100); // 1000ms de debounce
+}, 500); // 1000ms de debounce
 
 onMounted(() => {
   const requireScript = document.createElement('script');
