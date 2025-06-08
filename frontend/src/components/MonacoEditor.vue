@@ -47,7 +47,7 @@ const sendContentChange = debounce((value: any) => {
       timestamp: Date.now()
     });
   }
-}, 5000); // envoie toutes les 500ms max
+}, 1000); // envoie toutes les 1000ms max
 
 // Ajout du debounce pour la gestion des positions du curseur
 const debouncedCursorPositionChange = debounce((position: any) => {
@@ -113,7 +113,7 @@ onMounted(() => {
         log('MonacoEditor socket:', socket);
         log('Editor content changed:', value);
         // Émettre l'événement de mise à jour
-        emit('update:modelValue', value);
+        // emit('update:modelValue', value);
         // Envoyer directement au serveur via le socket
         if (socket) {
           sendContentChange(value);
