@@ -69,6 +69,8 @@ export class Gateway {
   @SubscribeMessage('codeChange')
   handleCodeChange(@MessageBody() data: { content: string; userId: string }): void {
     console.log('Received codeChange:', data);
+    if(!data.userId) return;
+    if(!data.content) return;
     const change: CodeChange = {
       content: data.content,
       version: this.currentVersion,
