@@ -197,8 +197,3 @@ onUnmounted(() => {
 const emit = defineEmits(['fileSelected']);
 </script>
 
-<style scoped>
-.font-mono {
-  font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-}
-</style> 
