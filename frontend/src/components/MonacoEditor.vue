@@ -4,7 +4,7 @@
 
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, inject } from 'vue';
 import { debounce } from 'lodash';
 import { userPseudo } from '../composables/useMonaco';
 
@@ -21,6 +21,7 @@ const emit = defineEmits<{
   (e: 'editorCreated', value: any): void;
 }>();
 
+const socket = inject('socket') as any;
 const editorContainer = ref<HTMLElement | null>(null);
 
 let editorInstance: any = null;
@@ -29,9 +30,17 @@ const decorationsRef = ref<string[]>([]);
 
 // Fonction appelée quand le contenu change
 const sendContentChange = debounce((value: any) => {
+  console.log('MonacoEditor socket:', socket);
+  console.log('Sending content change:', value);
   emit('update:modelValue', value);
-
-}, 500); // envoie toutes les 100ms max
+  if (socket) {
+    socket.emit('codeChange', {
+      content: value,
+      userId: props.userId,
+      timestamp: Date.now()
+    });
+  }
+}, 500); // envoie toutes les 500ms max
 
 onMounted(() => {
   const requireScript = document.createElement('script');
@@ -83,12 +92,23 @@ onMounted(() => {
 
       editorInstance.onDidChangeModelContent(() => {
         const value = editorInstance.getValue();
-        sendContentChange(value)
+        console.log('MonacoEditor socket:', socket);
+        console.log('Editor content changed:', value);
+        // Émettre l'événement de mise à jour
+        emit('update:modelValue', value);
+        // Envoyer directement au serveur via le socket
+        if (socket) {
+          socket.emit('codeChange', {
+            content: value,
+            userId: props.userId,
+            timestamp: Date.now()
+          });
+        }
       });
       editorInstance.onDidChangeCursorPosition(() => {
         const position = editorInstance.getPosition();
         if (position) {
-          // On émet l’événement via le parent
+          // On émet l'événement via le parent
           emit('cursorPositionChange', {
             userId: props.userId,
             userPseudo: userPseudo.value || 'Inconnu',
@@ -131,15 +151,15 @@ watch(
           hoverMessage: { value: `👤 ${position.userPseudo}` }
         }
       });
-      // Injecter dynamiquement la couleur si elle n’existe pas déjà
+      // Injecter dynamiquement la couleur si elle n'existe pas déjà
       if (!document.querySelector(`#remote-cursor-style-${otherUserId}`)) {
         const style = document.createElement('style');
         style.id = `remote-cursor-style-${otherUserId}`;
         style.innerHTML = `
-      .remote-cursor-${otherUserId} {
-        border-left: 10px solid ${color} !important;
-      }
-    `;
+          .remote-cursor-${otherUserId} {
+            border-left: 10px solid ${color} !important;
+          }
+        `;
         document.head.appendChild(style);
       }
     });
@@ -151,3 +171,87 @@ watch(
   { deep: true }
 );
 </script>
+
+
+<style scoped>
+/* Styles pour les curseurs distants */
+.remote-cursor-style-1 {
+  border-left: 10px solid red !important;
+}
+
+.remote-cursor-style-2 {
+  border-left: 10px solid blue !important;
+}
+
+.remote-cursor-style-3 {
+  border-left: 10px solid green !important;
+}
+
+.remote-cursor-style-4 {
+  border-left: 10px solid yellow !important;
+}
+
+.remote-cursor-style-5 {
+  border-left: 10px solid purple !important;
+}
+
+.remote-cursor-style-6 {
+  border-left: 10px solid pink !important;
+}
+
+.remote-cursor-style-7 {
+  border-left: 10px solid gray !important;
+}
+
+.remote-cursor-style-8 {
+  border-left: 10px solid black !important;
+}
+
+.remote-cursor-style-9 {
+  border-left: 10px solid white !important;
+}
+
+.remote-cursor-style-10 {
+  border-left: 10px solid orange !important;
+}
+
+.remote-cursor-style-11 {
+  border-left: 10px solid teal !important;
+}
+
+.remote-cursor-style-12 {
+  border-left: 10px solid lime !important;
+}
+
+.remote-cursor-style-13 {
+  border-left: 10px solid cyan !important;
+}
+
+.remote-cursor-style-14 {
+  border-left: 10px solid magenta !important;
+}
+
+.remote-cursor-style-15 {
+  border-left: 10px solid brown !important;
+}
+
+.remote-cursor-style-16 {
+  border-left: 10px solid indigo !important;
+}
+
+.remote-cursor-style-17 {
+  border-left: 10px solid violet !important;
+}
+
+.remote-cursor-style-18 {
+  border-left: 10px solid pink !important;
+}
+
+.remote-cursor-style-19 {
+  border-left: 10px solid purple !important;
+}
+
+.remote-cursor-style-20 {
+  border-left: 10px solid red !important;
+}
+</style>
