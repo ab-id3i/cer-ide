@@ -26,6 +26,13 @@ interface CursorUpdate {
   timestamp: number;
 }
 
+// Fonction de log conditionnelle
+const log = (...args: any[]) => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(...args);
+  }
+};
+
 @WebSocketGateway({
   cors: { origin: '*' },
 })
@@ -39,14 +46,13 @@ export class Gateway {
   private lastUpdate: CodeChange | null = null;
 
   constructor() {
-    console.log('Gateway initialized');
+    log('Gateway initialized');
     
     // Bufferiser les changements toutes les 500ms
     this.codeChange$
       .pipe(
         bufferTime(500),
         map(changes => {
-          // console.log('Processing changes:', changes);
           if (changes.length === 0) return [];
           
           // Trier par timestamp
@@ -71,7 +77,7 @@ export class Gateway {
             ...latestChange,
             version: this.currentVersion
           };
-          console.log('Broadcasting update:', this.lastUpdate);
+          log('Broadcasting update:', this.lastUpdate);
           this.server.emit('codeUpdate', this.lastUpdate);
         }
       });
@@ -106,7 +112,7 @@ export class Gateway {
 
   @SubscribeMessage('codeChange')
   handleCodeChange(@MessageBody() data: { content: string; userId: string }): void {
-        console.log('Received codeChange:', data);
+    log('Received codeChange:', data);
 
     if(!data.userId) return;
     if(!data.content) return;
@@ -116,13 +122,13 @@ export class Gateway {
       userId: data.userId,
       timestamp: Date.now()
     };
-    console.log('Pushing to buffer:', change);
+    log('Pushing to buffer:', change);
     this.codeChange$.next(change);
   }
 
   @SubscribeMessage('cursorPositionChange')
   handleCursorPositionChange(@MessageBody() payload: any): void {
-        console.log('Received cursorPositionChange:', payload);
+    log('Received cursorPositionChange:', payload);
 
     if(!payload.userId) return;
     if(!payload.position) return;
@@ -138,13 +144,13 @@ export class Gateway {
 
   @SubscribeMessage('requestVersion')
   handleVersionRequest(): void {
-    console.log('Received version request, current version:', this.currentVersion);
+    log('Received version request, current version:', this.currentVersion);
     if (this.lastUpdate) {
       const response = {
         version: this.currentVersion,
         content: this.lastUpdate.content
       };
-      console.log('Sending version update:', response);
+      log('Sending version update:', response);
       this.server.emit('versionUpdate', response);
     }
   }

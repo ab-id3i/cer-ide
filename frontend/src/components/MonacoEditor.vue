@@ -28,10 +28,17 @@ let editorInstance: any = null;
 let monacoEditorLib: any = null;
 const decorationsRef = ref<string[]>([]);
 
+// Fonction de log conditionnelle
+const log = (...args: any[]) => {
+  if (import.meta.env.DEV) {
+    console.log(...args);
+  }
+};
+
 // Fonction appelée quand le contenu change
 const sendContentChange = debounce((value: any) => {
-  console.log('MonacoEditor socket:', socket);
-  console.log('Sending content change:', value);
+  log('MonacoEditor socket:', socket);
+  log('Sending content change:', value);
   emit('update:modelValue', value);
   if (socket) {
     socket.emit('codeChange', {
@@ -103,18 +110,13 @@ onMounted(() => {
 
       editorInstance.onDidChangeModelContent(() => {
         const value = editorInstance.getValue();
-        console.log('MonacoEditor socket:', socket);
-        console.log('Editor content changed:', value);
+        log('MonacoEditor socket:', socket);
+        log('Editor content changed:', value);
         // Émettre l'événement de mise à jour
         emit('update:modelValue', value);
         // Envoyer directement au serveur via le socket
         if (socket) {
           sendContentChange(value);
-          // socket.emit('codeChange', {
-          //   content: value,
-          //   userId: props.userId,
-          //   timestamp: Date.now()
-          // });
         }
       });
       editorInstance.onDidChangeCursorPosition(() => {
