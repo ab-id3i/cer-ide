@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 // @ts-ignore
 import { Icon } from '@iconify/vue';
 import MonacoEditor from '../components/MonacoEditor.vue';
@@ -109,6 +109,7 @@ import { useCursors } from '../composables/useCursors';
 import { useCodeSync } from '../composables/useCodeSync';
 import { useMonaco, userPseudo } from '../composables/useMonaco';
 import { useSnippet } from '../composables/useSnippet';
+import { fileExamples } from '../data/fileExamples';
 
 const socket = inject('socket') as any;
 const userId = uuidv4();
@@ -120,6 +121,41 @@ const { editorInstance, handleEditorCreated } = useMonaco();
 const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
 const { code } = useCodeSync(socket);
 const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
+
+// Ajout de la gestion du fichier sélectionné
+const selectedFile = ref<string>('/src/views/Home.vue');
+const isVueFile = ref(false);
+const isJsonFile = ref(false);
+
+// Fonction pour gérer la sélection d'un fichier
+function handleFileSelected(file: any) {
+  selectedFile.value = file.path;
+  if (file.content) {
+    code.value = file.content;
+  }
+  
+  // Déterminer le type de fichier pour le preview
+  isVueFile.value = file.path.endsWith('.vue');
+  isJsonFile.value = file.path.endsWith('.json');
+  
+  // Mettre à jour le langage de l'éditeur
+  if (editorInstance.value) {
+    const language = file.path.endsWith('.vue') ? 'html' :
+                    file.path.endsWith('.json') ? 'json' :
+                    file.path.endsWith('.ts') ? 'typescript' :
+                    'plaintext';
+    editorInstance.value.updateOptions({ language });
+  }
+}
+
+// Sélectionner le fichier Home.vue par défaut au chargement
+onMounted(() => {
+  const homeFile = {
+    path: '/src/views/Home.vue',
+    content: fileExamples['/src/views/Home.vue']
+  };
+  handleFileSelected(homeFile);
+});
 
 const notification = ref({ show: false, message: '', type: 'success' as 'success' | 'error' | 'warning' });
 function showNotification(message: string, type: 'success' | 'error' | 'warning' = 'success', duration = 3000) {
@@ -145,19 +181,6 @@ function redo() {
     showNotification('En cours de développement', 'warning', 2000);
   }
 }
-
-// Gestionnaire pour le fichier sélectionné
-function handleFileSelected(file: any) {
-  if (file.content) {
-    code.value = file.content;
-    // Déterminer le type de fichier
-    isVueFile.value = file.name.endsWith('.vue');
-    isJsonFile.value = file.name.endsWith('.json');
-  }
-}
-
-const isVueFile = ref(false);
-const isJsonFile = ref(false);
 
 </script>
 

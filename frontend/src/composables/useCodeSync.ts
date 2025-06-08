@@ -10,7 +10,7 @@ interface CodeUpdate {
 // Fonction de log conditionnelle
 const log = (...args: any[]) => {
   if (import.meta.env.DEV) {
-    log(...args);
+    console.log(...args);
   }
 };
 
