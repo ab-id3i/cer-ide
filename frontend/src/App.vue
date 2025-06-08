@@ -11,7 +11,8 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
-import { userPseudo } from './composables/useMonaco';
+import { userPseudo,userId } from './composables/useMonaco';
+import { v4 as uuidv4 } from 'uuid';
 
 const pseudoInput = ref('');
 const showPseudoModal = ref(false);
@@ -32,6 +33,14 @@ onMounted(() => {
   } else {
     showPseudoModal.value = true;
   }
+
+  const savedUserId = localStorage.getItem('userId');
+  if (savedUserId) {
+    userId.value = savedUserId;
+  } else {
+    userId.value = uuidv4();
+    localStorage.setItem('userId', userId.value);
+  }
 });
 
 watch(userPseudo, (val) => {
@@ -39,5 +48,6 @@ watch(userPseudo, (val) => {
     showPseudoModal.value = false;
   }
 });
+
 </script>
 

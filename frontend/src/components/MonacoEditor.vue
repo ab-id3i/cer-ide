@@ -172,9 +172,37 @@ watch(
       if (!document.querySelector(`#remote-cursor-style-${otherUserId}`)) {
         const style = document.createElement('style');
         style.id = `remote-cursor-style-${otherUserId}`;
+        // Récupérer la première lettre du pseudo (ou 'U' par défaut)
+        const initial = (cursorData.userPseudo && cursorData.userPseudo.length > 0)
+          ? cursorData.userPseudo[0].toUpperCase()
+          : 'U';
         style.innerHTML = `
           .remote-cursor-${otherUserId} {
-            border-left: 10px solid ${color} !important;
+            border-left: 15px solid ${color} !important;
+            position: relative;
+            cursor: pointer !important;
+          }
+          .remote-cursor-${otherUserId}::after {
+            content: '${initial}';
+            position: absolute;
+            left: -10px;
+            top: -4px;
+            z-index: 1000000;
+            width: 16px;
+            height: 16px;
+            background: ${color};
+            color: #fff;
+            font-size: 11px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            z-index: 10;
+            border: 1.5px solid #222;
+            cursor: pointer;
           }
         `;
         document.head.appendChild(style);
@@ -188,4 +216,8 @@ watch(
   { deep: true }
 );
 </script>
-
+<style>
+.mtkw{
+  cursor: pointer !important;
+}
+</style>

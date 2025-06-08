@@ -108,21 +108,19 @@ import JsonPreview from '../components/JsonPreview.vue';
 import SnippetList from '../components/SnippetList.vue';
 import FileTree from '../components/FileTree.vue';
 import NotificationToast from '../components/NotificationToast.vue';
-import { v4 as uuidv4 } from 'uuid';
 import { useCursors } from '../composables/useCursors';
 import { useCodeSync } from '../composables/useCodeSync';
-import { useMonaco, userPseudo } from '../composables/useMonaco';
+import { useMonaco, userPseudo, userId } from '../composables/useMonaco';
 import { useSnippet } from '../composables/useSnippet';
 import { fileExamples } from '../data/fileExamples';
 
 const socket = inject('socket') as any;
-const userId = uuidv4();
 
 const showSnippets = ref(false);
 const showFileTree = ref(false);
 const layoutMode = ref<'vertical' | 'horizontal'>('horizontal');
 const { editorInstance, handleEditorCreated } = useMonaco();
-const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId, socket);
+const { otherCursors, userColors, handleCursorPositionChange } = useCursors(userId.value, socket);
 const { code } = useCodeSync(socket);
 const { handleSnippetDrag, handleDrop } = useSnippet(editorInstance, code);
 
