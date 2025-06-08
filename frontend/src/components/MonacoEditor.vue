@@ -28,19 +28,19 @@ let editorInstance: any = null;
 let monacoEditorLib: any = null;
 const decorationsRef = ref<string[]>([]);
 
-// Fonction appelée quand le contenu change
-const sendContentChange = debounce((value: any) => {
-  console.log('MonacoEditor socket:', socket);
-  console.log('Sending content change:', value);
-  emit('update:modelValue', value);
-  if (socket) {
-    socket.emit('codeChange', {
-      content: value,
-      userId: props.userId,
-      timestamp: Date.now()
-    });
-  }
-}, 500); // envoie toutes les 500ms max
+// // Fonction appelée quand le contenu change
+// const sendContentChange = debounce((value: any) => {
+//   console.log('MonacoEditor socket:', socket);
+//   console.log('Sending content change:', value);
+//   emit('update:modelValue', value);
+//   if (socket) {
+//     socket.emit('codeChange', {
+//       content: value,
+//       userId: props.userId,
+//       timestamp: Date.now()
+//     });
+//   }
+// }, 500); // envoie toutes les 500ms max
 
 onMounted(() => {
   const requireScript = document.createElement('script');
