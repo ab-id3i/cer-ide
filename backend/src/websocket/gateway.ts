@@ -83,6 +83,8 @@ export class Gateway {
 
   @SubscribeMessage('cursorPositionChange')
   handleCursorPositionChange(@MessageBody() payload: any): void {
+    if(!payload.userId) return;
+    if(!payload.position) return;
     console.log('Received cursorPositionChange:', payload);
     this.server.emit('cursorPositionUpdate', payload);
   }
@@ -99,9 +101,4 @@ export class Gateway {
       this.server.emit('versionUpdate', response);
     }
   }
-
-  @SubscribeMessage('*')
-handleAnyMessage(@MessageBody() data: any, @ConnectedSocket() client: any) {
-  console.log('Received ANY message:', data);
-}
 }
