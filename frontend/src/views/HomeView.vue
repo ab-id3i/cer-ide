@@ -7,6 +7,10 @@
         <span class="font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">iD3i CodeLab</span>
         <span v-if="userPseudo" class="ml-4 font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">- {{ userPseudo }}</span>
       </div>
+      <!-- Nom du fichier sélectionné -->
+      <div class="absolute left-1/2 transform -translate-x-1/2 text-gray-400 font-mono text-sm truncate max-w-md">
+        {{ selectedFile }}
+      </div>
       <div class="flex items-center gap-4">
         <button @click="undo" class="neon-btn neon-blue" title="Annuler (Ctrl+Z)">
           <Icon icon="mdi:undo" width="22" height="22" />
