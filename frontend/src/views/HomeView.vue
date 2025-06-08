@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen flex flex-col">
     <!-- Navbar -->
-    <nav class="bg-[#181c24] font-mono border-b-4 border-cyan-400 shadow-lg px-6 py-3 flex items-center justify-between relative z-10">
+    <nav class="bg-[#181c24] font-mono border-b-1 border-gray-500 shadow-lg px-6 py-3 flex items-center justify-between relative z-10">
       <div class="flex items-center gap-2">
         <img src="/logo.svg" alt="Logo iD3i CodeLab" class="h-8 w-8 inline-block align-middle" />
         <span class="font-extrabold text-cyan-400 tracking-widest text-lg uppercase drop-shadow-neon">iD3i CodeLab</span>
@@ -64,8 +64,8 @@
       </div>
       <!-- Sidebar dockée à droite -->
       <transition name="slide">
-        <aside v-if="showSnippets" class="w-80 h-full bg-black border-l border-gray-200 shadow-lg flex flex-col z-40">
-          <div class=" bg-black flex items-center justify-between px-4 py-2 border-b">
+        <aside v-if="showSnippets" class="w-80 h-full bg-[#252526] shadow-lg border-t  border-gray-500 flex flex-col z-40">
+          <div class="bg-[#252526] flex items-center justify-between px-4 py-2 border-b border-gray-500">
             <h3 class="text-lg font-extrabold text-cyan-400 tracking-widest uppercase drop-shadow-neon">Snippets</h3>
             <button @click="showSnippets = false" class="text-cyan-400 drop-shadow-neon">✕</button>
           </div>
@@ -76,8 +76,8 @@
       </transition>
       <!-- Nouveau sidepanel pour l'arborescence de fichiers -->
       <transition name="slide">
-        <aside v-if="showFileTree" class="w-80 h-full bg-black border-l border-gray-200 shadow-lg flex flex-col z-40">
-          <div class="bg-black flex items-center justify-between px-4 py-2 border-b">
+        <aside v-if="showFileTree" class="w-80 h-full bg-[#252526] border-t border-l border-gray-500 shadow-lg flex flex-col z-40">
+          <div class="bg-[#252526] flex items-center justify-between px-4 py-2 border-b border-gray-500">
             <h3 class="text-lg font-extrabold text-cyan-400 tracking-widest uppercase drop-shadow-neon">Arborescence</h3>
             <button @click="showFileTree = false" class="text-cyan-400 drop-shadow-neon">✕</button>
           </div>

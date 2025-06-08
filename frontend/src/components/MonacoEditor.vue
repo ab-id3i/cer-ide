@@ -1,5 +1,5 @@
 <template>
-  <div ref="editorContainer" style="height: 100%; border: 1px solid #ccc;" @dragover.prevent></div>
+  <div ref="editorContainer" style="height: 100%;" @dragover.prevent class="border border-gray-500"></div>
 </template>
 
 

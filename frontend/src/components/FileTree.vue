@@ -59,7 +59,7 @@
 
     <!-- Menu contextuel -->
     <div v-if="contextMenu.show" 
-      class="fixed bg-[#181c24] border border-cyan-400 rounded shadow-lg py-2 z-50"
+      class="fixed bg-[#181c24] rounded shadow-lg py-2 z-50"
       :style="{ top: contextMenu.y + 'px', left: contextMenu.x + 'px' }">
       <div class="px-4 py-2 text-cyan-400 font-mono text-sm hover:bg-cyan-400 hover:text-[#181c24] cursor-pointer"
         @click="openFile">

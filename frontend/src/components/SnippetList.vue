@@ -1,7 +1,7 @@
 <template>
-    <div class="bg-black shadow-lg overflow-y-auto border-cyan-400 font-mono flex flex-col">
+    <div class="bg-[#252526] shadow-lg overflow-y-auto b font-mono flex flex-col">
         <div class="flex flex-col gap-4 p-4 flex-1">
-            <select id="category-select" v-model="selectedCategory" class="bg-gray-800 text-cyan-200 border border-cyan-400 rounded px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            <select id="category-select" v-model="selectedCategory" class="bg-gray-800 text-cyan-200 border border-gray-500 rounded px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-400">
                 <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
             </select>
             <div v-if="selectedCategory !== 'Actions'">
