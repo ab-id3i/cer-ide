@@ -9,6 +9,14 @@ export function useCursors(userId: string, socket: any) {
     userPseudo: string;
     position: any;
   }) {
+    // Vérification de la validité de la position
+    if (!payload.position || 
+        typeof payload.position.lineNumber !== 'number' || 
+        typeof payload.position.column !== 'number' ||
+        payload.position.lineNumber < 1 ||
+        payload.position.column < 1) {
+      return;
+    }
     socket.emit("cursorPositionChange", payload);
   }
 
@@ -25,11 +33,17 @@ export function useCursors(userId: string, socket: any) {
     "cursorPositionUpdate",
     (payload: { userId: string; userPseudo: string; position: any }) => {
       if (payload.userId !== userId) {
+        // Vérification de la validité de la position
+        if (!payload.position || 
+            typeof payload.position.lineNumber !== 'number' || 
+            typeof payload.position.column !== 'number' ||
+            payload.position.lineNumber < 1 ||
+            payload.position.column < 1) {
+          return;
+        }
+
         if (!userColors.value[payload.userId]) {
           userColors.value[payload.userId] = getColorForUser(payload.userId);
-        }
-        if (otherCursors.value[payload.userPseudo]) {
-          otherCursors.value[payload.userPseudo] = [];
         }
 
         otherCursors.value[payload.userId] = {

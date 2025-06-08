@@ -16,6 +16,16 @@ interface CodeChange {
   timestamp: number;
 }
 
+interface CursorUpdate {
+  userId: string;
+  userPseudo: string;
+  position: {
+    lineNumber: number;
+    column: number;
+  };
+  timestamp: number;
+}
+
 @WebSocketGateway({
   cors: { origin: '*' },
 })
@@ -24,6 +34,7 @@ export class Gateway {
   server: Server;
 
   private codeChange$ = new Subject<CodeChange>();
+  private cursorUpdate$ = new Subject<CursorUpdate>();
   private currentVersion = 0;
   private lastUpdate: CodeChange | null = null;
 
@@ -64,6 +75,33 @@ export class Gateway {
           this.server.emit('codeUpdate', this.lastUpdate);
         }
       });
+
+    // Bufferiser les mises à jour de curseur toutes les 100ms
+    this.cursorUpdate$
+      .pipe(
+        bufferTime(100),
+        map(updates => {
+          if (updates.length === 0) return [];
+          
+          // Garder uniquement la dernière mise à jour par utilisateur
+          const latestUpdates = new Map<string, CursorUpdate>();
+          for (const update of updates) {
+            const existing = latestUpdates.get(update.userId);
+            if (!existing || update.timestamp > existing.timestamp) {
+              latestUpdates.set(update.userId, update);
+            }
+          }
+          
+          return Array.from(latestUpdates.values());
+        })
+      )
+      .subscribe((updates) => {
+        if (updates.length > 0) {
+          for (const update of updates) {
+            this.server.emit('cursorPositionUpdate', update);
+          }
+        }
+      });
   }
 
   @SubscribeMessage('codeChange')
@@ -88,7 +126,14 @@ export class Gateway {
 
     if(!payload.userId) return;
     if(!payload.position) return;
-    this.server.emit('cursorPositionUpdate', payload);
+    if(!payload.userPseudo) return;
+
+    const update: CursorUpdate = {
+      ...payload,
+      timestamp: Date.now()
+    };
+    
+    this.cursorUpdate$.next(update);
   }
 
   @SubscribeMessage('requestVersion')
