@@ -40,7 +40,7 @@ const sendContentChange = debounce((value: any) => {
       timestamp: Date.now()
     });
   }
-}, 500); // envoie toutes les 500ms max
+}, 5000); // envoie toutes les 500ms max
 
 onMounted(() => {
   const requireScript = document.createElement('script');
