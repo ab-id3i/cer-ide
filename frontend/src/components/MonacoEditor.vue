@@ -42,6 +42,17 @@ const sendContentChange = debounce((value: any) => {
   }
 }, 5000); // envoie toutes les 500ms max
 
+// Ajout du debounce pour la gestion des positions du curseur
+const debouncedCursorPositionChange = debounce((position: any) => {
+  if (position) {
+    emit('cursorPositionChange', {
+      userId: props.userId,
+      userPseudo: userPseudo.value || 'Inconnu',
+      position
+    });
+  }
+}, 1000); // 1000ms de debounce
+
 onMounted(() => {
   const requireScript = document.createElement('script');
   requireScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js';
@@ -108,14 +119,7 @@ onMounted(() => {
       });
       editorInstance.onDidChangeCursorPosition(() => {
         const position = editorInstance.getPosition();
-        if (position) {
-          // On émet l'événement via le parent
-          emit('cursorPositionChange', {
-            userId: props.userId,
-            userPseudo: userPseudo.value || 'Inconnu',
-            position
-          });
-        }
+        debouncedCursorPositionChange(position);
       });
     });
   };
@@ -137,19 +141,20 @@ watch(
   (newCursors) => {
     if (!editorInstance) return;
     const decorations: any[] = [];
-    Object.entries(newCursors).forEach(([otherUserId, position]) => {
-      const color = props.userColors[otherUserId] || 'red'; // fallback au cas où
+    Object.entries(newCursors).forEach(([otherUserId, cursorData]) => {
+      if (!cursorData || !cursorData.position) return; // Vérification supplémentaire
+      const color = props.userColors[otherUserId] || 'red';
       decorations.push({
         range: new monacoEditorLib.Range(
-          position.position.lineNumber,
-          position.position.column,
-          position.position.lineNumber,
-          position.position.column
+          cursorData.position.lineNumber,
+          cursorData.position.column,
+          cursorData.position.lineNumber,
+          cursorData.position.column
         ),
         options: {
           className: `remote-cursor-${otherUserId}`,
           isWholeLine: true,
-          hoverMessage: { value: `👤 ${position.userPseudo}` }
+          hoverMessage: { value: `👤 ${cursorData.userPseudo}` }
         }
       });
       // Injecter dynamiquement la couleur si elle n'existe pas déjà
