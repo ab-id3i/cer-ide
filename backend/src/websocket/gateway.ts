@@ -35,7 +35,7 @@ export class Gateway {
       .pipe(
         bufferTime(500),
         map(changes => {
-          console.log('Processing changes:', changes);
+          // console.log('Processing changes:', changes);
           if (changes.length === 0) return [];
           
           // Trier par timestamp
