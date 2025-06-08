@@ -15,13 +15,22 @@ export function useCodeSync(
   const currentVersion = ref(0);
   const lastUpdateTimestamp = ref(Date.now());
   const isUpdating = ref(false);
+  const lastContent = ref(initialCode);
 
   // Écouter les mises à jour de code depuis le serveur
   socket.on("codeUpdate", (update: CodeUpdate) => {
     console.log('Received codeUpdate:', update, 'version:', update.version, 'currentVersion:', currentVersion.value);
+    
+    // Ignorer les mises à jour si le contenu est identique
+    if (update.content === lastContent.value) {
+      console.log('Ignoring update with identical content');
+      return;
+    }
+
     if (update.version > currentVersion.value) {
       console.log('Applying update version:', update.version);
       isUpdating.value = true;
+      lastContent.value = update.content;
       code.value = update.content;
       currentVersion.value = update.version;
       lastUpdateTimestamp.value = update.timestamp;
@@ -34,9 +43,17 @@ export function useCodeSync(
   // Écouter les mises à jour de version
   socket.on("versionUpdate", (update: { version: number; content: string }) => {
     console.log('Received versionUpdate:', update);
+    
+    // Ignorer les mises à jour si le contenu est identique
+    if (update.content === lastContent.value) {
+      console.log('Ignoring version update with identical content');
+      return;
+    }
+
     if (update.version > currentVersion.value) {
       console.log('Applying version update:', update.version);
       isUpdating.value = true;
+      lastContent.value = update.content;
       code.value = update.content;
       currentVersion.value = update.version;
       isUpdating.value = false;
@@ -51,6 +68,12 @@ export function useCodeSync(
       return;
     }
 
+    // Ignorer les mises à jour si le contenu est identique
+    if (newCode === lastContent.value) {
+      console.log('Skipping update with identical content');
+      return;
+    }
+
     if (updateTimeout) {
       clearTimeout(updateTimeout);
     }
@@ -61,6 +84,7 @@ export function useCodeSync(
         userId: socket.id,
         timestamp: Date.now()
       });
+      lastContent.value = newCode;
       socket.emit("codeChange", {
         content: newCode,
         userId: socket.id,

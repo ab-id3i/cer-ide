@@ -131,7 +131,16 @@ watch(
   () => props.modelValue,
   (newVal) => {
     if (editorInstance && newVal !== editorInstance.getValue()) {
+      // Sauvegarder la position actuelle du curseur
+      const currentPosition = editorInstance.getPosition();
+      
+      // Mettre à jour le contenu
       editorInstance.setValue(newVal);
+      
+      // Restaurer la position du curseur si elle existe
+      if (currentPosition) {
+        editorInstance.setPosition(currentPosition);
+      }
     }
   }
 );
